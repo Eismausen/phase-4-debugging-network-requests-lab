@@ -63,11 +63,33 @@ developing your own process.
 - Add a new toy when the toy form is submitted
 
   - How I debugged:
+    - started by trying to submit a new toy to observe the behavior 
+      -- clicking on 'Add a Toy' redirects to form successfully
+      -- toy adds to state, but not to db
+      -- observe console NameError: "uninitialized ToysController" / "app/controllers/toys_controller.rb:10:in 'create'
+      -- fixed toy = Toys.create... to toy = Toy.create
+
 
 - Update the number of likes for a toy
 
   - How I debugged:
 
+  -- attempt to like toy, observe "Unpermitted parameter: :id", app/controllers/toys_controller.rb:15 in 'update'
+  -- check toys_controller strong params
+    -- observe :id not permitted attribute
+    -- add :id to permitted attributes
+  -- observed like count is being updated on db, but not on front-end
+    -- checked the toys_controller to see what's being returned from "def update"
+    -- observed no rendered response
+      -- added "render json: toy, status: :ok"
+      -- likes updating front and back end correctly
+
 - Donate a toy to Goodwill (and delete it from our database)
 
   - How I debugged:
+
+  -- attempt to use "Donate to Goodwill" button, observe console error: "ActionController::RoutingError (No route matches [DELETE] "/toys/1")
+    -- added :destroy to routes.rb, resources: toys [...]
+    -- delete action completes succesfully in DB, delete is reflected on front end
+
+  
